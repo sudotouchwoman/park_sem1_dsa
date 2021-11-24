@@ -1,0 +1,181 @@
+==1221== Memcheck, a memory error detector
+==1221== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==1221== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==1221== Command: ./main
+==1221== 
+79 commands in total
+1) PUSHES FRONT: 10
+buffer contains: [{ 10 }] 0 
+2) PUSHES BACK: 20
+buffer contains: { 10 }[ 20 ]
+3) PUSHES BACK: 30
+doubles size
+doubled and returned 4
+buffer contains: { 10 } 20 [ 30 ] 0 
+4) PUSHES BACK: 40
+buffer contains: { 10 } 20  30 [ 40 ]
+5) PUSHES BACK: 50
+doubles size
+doubled and returned 8
+buffer contains: { 10 } 20  30  40 [ 50 ] 0  0  0 
+6) PUSHES BACK: 60
+buffer contains: { 10 } 20  30  40  50 [ 60 ] 0  0 
+7) PUSHES BACK: 70
+buffer contains: { 10 } 20  30  40  50  60 [ 70 ] 0 
+8) PUSHES FRONT: 333
+buffer contains:  10  20  30  40  50  60 [ 70 ]{ 333 }
+9) PUSHES FRONT: 777
+doubles size
+doubled and returned 15
+buffer contains:  10  20  30  40  50  60 [ 70 ] 0  0  0  0  0  0  0 { 777 } 333 
+10) PUSHES BACK: 80
+buffer contains:  10  20  30  40  50  60  70 [ 80 ] 0  0  0  0  0  0 { 777 } 333 
+11) PUSHES BACK: 90
+buffer contains:  10  20  30  40  50  60  70  80 [ 90 ] 0  0  0  0  0 { 777 } 333 
+12) PUSHES BACK: 100
+buffer contains:  10  20  30  40  50  60  70  80  90 [ 100 ] 0  0  0  0 { 777 } 333 
+13) PUSHES BACK: 110
+buffer contains:  10  20  30  40  50  60  70  80  90  100 [ 110 ] 0  0  0 { 777 } 333 
+14) PUSHES BACK: 999
+buffer contains:  10  20  30  40  50  60  70  80  90  100  110 [ 999 ] 0  0 { 777 } 333 
+15) PUSHES BACK: 180
+buffer contains:  10  20  30  40  50  60  70  80  90  100  110  999 [ 180 ] 0 { 777 } 333 
+16) POPS BACK: expected: 180, got 180
+buffer contains:  10  20  30  40  50  60  70  80  90  100  110 [ 999 ] 0  0 { 777 } 333 
+17) PUSHES BACK: 1000
+buffer contains:  10  20  30  40  50  60  70  80  90  100  110  999 [ 1000 ] 0 { 777 } 333 
+18) PUSHES FRONT: 2323
+buffer contains:  10  20  30  40  50  60  70  80  90  100  110  999 [ 1000 ]{ 2323 } 777  333 
+19) PUSHES FRONT: 4444
+doubles size
+doubled and returned 29
+buffer contains:  10  20  30  40  50  60  70  80  90  100  110  999 [ 1000 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 { 4444 } 2323  777  333 
+20) POPS FRONT: expected: 4444, got 4444
+buffer contains:  10  20  30  40  50  60  70  80  90  100  110  999 [ 1000 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 { 2323 } 777  333 
+21) POPS FRONT: expected: 2323, got 2323
+buffer contains:  10  20  30  40  50  60  70  80  90  100  110  999 [ 1000 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 { 777 } 333 
+22) POPS FRONT: expected: 777, got 777
+buffer contains:  10  20  30  40  50  60  70  80  90  100  110  999 [ 1000 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 { 333 }
+23) POPS FRONT: expected: 333, got 333
+buffer contains: { 10 } 20  30  40  50  60  70  80  90  100  110  999 [ 1000 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+24) POPS FRONT: expected: 10, got 10
+buffer contains:  0 { 20 } 30  40  50  60  70  80  90  100  110  999 [ 1000 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+25) POPS FRONT: expected: 20, got 20
+buffer contains:  0  0 { 30 } 40  50  60  70  80  90  100  110  999 [ 1000 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+26) POPS FRONT: expected: 30, got 30
+buffer contains:  0  0  0 { 40 } 50  60  70  80  90  100  110  999 [ 1000 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+27) PUSHES BACK: 555
+buffer contains:  0  0  0 { 40 } 50  60  70  80  90  100  110  999  1000 [ 555 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+28) POPS BACK: expected: 555, got 555
+buffer contains:  0  0  0 { 40 } 50  60  70  80  90  100  110  999 [ 1000 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+29) POPS BACK: expected: 1000, got 1000
+buffer contains:  0  0  0 { 40 } 50  60  70  80  90  100  110 [ 999 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+30) POPS BACK: expected: 999, got 999
+buffer contains:  0  0  0 { 40 } 50  60  70  80  90  100 [ 110 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+31) POPS BACK: expected: 110, got 110
+buffer contains:  0  0  0 { 40 } 50  60  70  80  90 [ 100 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+32) POPS BACK: expected: 100, got 100
+buffer contains:  0  0  0 { 40 } 50  60  70  80 [ 90 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+33) POPS BACK: expected: 90, got 90
+buffer contains:  0  0  0 { 40 } 50  60  70 [ 80 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+34) POPS BACK: expected: 80, got 80
+buffer contains:  0  0  0 { 40 } 50  60 [ 70 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+35) POPS BACK: expected: 70, got 70
+buffer contains:  0  0  0 { 40 } 50 [ 60 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+36) POPS FRONT: expected: 40, got 40
+buffer contains:  0  0  0  0 { 50 }[ 60 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+37) POPS FRONT: expected: 50, got 50
+buffer contains:  0  0  0  0  0 [{ 60 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+38) POPS FRONT: expected: 60, got 60
+buffer contains:  0  0  0  0  0  0 [{ 0 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+39) POPS FRONT: expected: -1, got -1
+buffer contains:  0  0  0  0  0  0 [{ 0 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+40) PUSHES FRONT: 15
+buffer contains:  0  0  0  0  0 [{ 15 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+41) POPS FRONT: expected: 15, got 15
+buffer contains:  0  0  0  0  0  0 [{ 0 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+42) PUSHES BACK: 900
+buffer contains:  0  0  0  0  0  0  0 [{ 900 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+43) PUSHES BACK: 500
+buffer contains:  0  0  0  0  0  0  0 { 900 }[ 500 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+44) POPS FRONT: expected: 900, got 900
+buffer contains:  0  0  0  0  0  0  0  0 [{ 500 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+45) POPS FRONT: expected: 500, got 500
+buffer contains:  0  0  0  0  0  0  0  0  0 [{ 0 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+46) POPS FRONT: expected: -1, got -1
+buffer contains:  0  0  0  0  0  0  0  0  0 [{ 0 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+47) POPS FRONT: expected: -1, got -1
+buffer contains:  0  0  0  0  0  0  0  0  0 [{ 0 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+48) PUSHES BACK: 777
+buffer contains:  0  0  0  0  0  0  0  0  0  0 [{ 777 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+49) POPS FRONT: expected: 777, got 777
+buffer contains:  0  0  0  0  0  0  0  0  0  0  0 [{ 0 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+50) PUSHES FRONT: 20000
+buffer contains:  0  0  0  0  0  0  0  0  0  0 [{ 20000 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+51) PUSHES FRONT: 300
+buffer contains:  0  0  0  0  0  0  0  0  0 { 300 }[ 20000 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+52) PUSHES BACK: 4400
+buffer contains:  0  0  0  0  0  0  0  0  0 { 300 } 20000 [ 4400 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+53) POPS BACK: expected: 4400, got 4400
+buffer contains:  0  0  0  0  0  0  0  0  0 { 300 }[ 20000 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+54) POPS BACK: expected: 20000, got 20000
+buffer contains:  0  0  0  0  0  0  0  0  0 [{ 300 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+55) POPS BACK: expected: 300, got 300
+buffer contains:  0  0  0  0  0  0  0  0 [{ 0 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+56) POPS BACK: expected: -1, got -1
+buffer contains:  0  0  0  0  0  0  0  0 [{ 0 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+57) POPS FRONT: expected: -1, got -1
+buffer contains:  0  0  0  0  0  0  0  0 [{ 0 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+58) PUSHES BACK: 5555
+buffer contains:  0  0  0  0  0  0  0  0  0 [{ 5555 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+59) PUSHES BACK: 8888
+buffer contains:  0  0  0  0  0  0  0  0  0 { 5555 }[ 8888 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+60) PUSHES FRONT: 202020
+buffer contains:  0  0  0  0  0  0  0  0 { 202020 } 5555 [ 8888 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+61) POPS BACK: expected: 8888, got 8888
+buffer contains:  0  0  0  0  0  0  0  0 { 202020 }[ 5555 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+62) POPS BACK: expected: 5555, got 5555
+buffer contains:  0  0  0  0  0  0  0  0 [{ 202020 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+63) POPS BACK: expected: 202020, got 202020
+buffer contains:  0  0  0  0  0  0  0 [{ 0 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+64) POPS FRONT: expected: -1, got -1
+buffer contains:  0  0  0  0  0  0  0 [{ 0 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+65) POPS BACK: expected: -1, got -1
+buffer contains:  0  0  0  0  0  0  0 [{ 0 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+66) PUSHES FRONT: 100
+buffer contains:  0  0  0  0  0  0 [{ 100 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+67) PUSHES FRONT: 200
+buffer contains:  0  0  0  0  0 { 200 }[ 100 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+68) PUSHES FRONT: 300
+buffer contains:  0  0  0  0 { 300 } 200 [ 100 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+69) PUSHES BACK: 3333
+buffer contains:  0  0  0  0 { 300 } 200  100 [ 3333 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+70) PUSHES BACK: 4444
+buffer contains:  0  0  0  0 { 300 } 200  100  3333 [ 4444 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+71) PUSHES BACK: 8989
+buffer contains:  0  0  0  0 { 300 } 200  100  3333  4444 [ 8989 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+72) POPS FRONT: expected: 300, got 300
+buffer contains:  0  0  0  0  0 { 200 } 100  3333  4444 [ 8989 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+73) POPS FRONT: expected: 200, got 200
+buffer contains:  0  0  0  0  0  0 { 100 } 3333  4444 [ 8989 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+74) POPS FRONT: expected: 100, got 100
+buffer contains:  0  0  0  0  0  0  0 { 3333 } 4444 [ 8989 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+75) POPS FRONT: expected: 3333, got 3333
+buffer contains:  0  0  0  0  0  0  0  0 { 4444 }[ 8989 ] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+76) POPS FRONT: expected: 4444, got 4444
+buffer contains:  0  0  0  0  0  0  0  0  0 [{ 8989 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+77) POPS FRONT: expected: 8989, got 8989
+buffer contains:  0  0  0  0  0  0  0  0  0  0 [{ 0 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+78) POPS FRONT: expected: -1, got -1
+buffer contains:  0  0  0  0  0  0  0  0  0  0 [{ 0 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+79) POPS BACK: expected: -1, got -1
+buffer contains:  0  0  0  0  0  0  0  0  0  0 [{ 0 }] 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+YES==1221== 
+==1221== HEAP SUMMARY:
+==1221==     in use at exit: 0 bytes in 0 blocks
+==1221==   total heap usage: 8 allocs, 8 frees, 81,144 bytes allocated
+==1221== 
+==1221== All heap blocks were freed -- no leaks are possible
+==1221== 
+==1221== For lists of detected and suppressed errors, rerun with: -s
+==1221== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
