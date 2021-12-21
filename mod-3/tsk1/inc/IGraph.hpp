@@ -1,5 +1,8 @@
 #pragma once
+
 #include <vector>
+#include <queue>
+#include <functional>
 
 struct IGraph {
     virtual ~IGraph() {}
@@ -11,3 +14,5 @@ struct IGraph {
     virtual std::vector<int> GetNextVertices(int vertex) const = 0;
     virtual std::vector<int> GetPrevVertices(int vertex) const = 0;
 };
+
+void BFS(const IGraph & g, const std::function<void(const int &)> & visitor);

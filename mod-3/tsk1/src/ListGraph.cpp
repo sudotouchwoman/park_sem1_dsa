@@ -8,14 +8,14 @@ ListGraph::ListGraph(const IGraph & other) :
     {
         for (size_t i = 0; i < vertices; ++i) {
             for (const int v: other.GetNextVertices(i))
-                adjacencyLists[i].push_back(v);
+                adjacencyLists[i].emplace_back(v);
         }
     }
 
 void ListGraph::AddEdge(const int from, const int to) {
     checkVertex(from);
     checkVertex(to);
-    adjacencyLists[from].push_back(to);
+    adjacencyLists[from].emplace_back(to);
 }
 
 std::vector<int> ListGraph::GetNextVertices(const int vertex) const {
@@ -30,7 +30,7 @@ std::vector<int> ListGraph::GetPrevVertices(const int vertex) const {
     for (size_t v = 0; v < adjacencyLists.size(); ++v) {
         for (const int adjacent : adjacencyLists[v])
             if (adjacent == vertex)
-                preceding.push_back(v);
+                preceding.emplace_back(v);
     }
 
     return preceding;

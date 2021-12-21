@@ -24,7 +24,7 @@ std::vector<int> SetGraph::GetNextVertices(const int vertex) const {
 
     for (const auto & adjacent : adjacencySets[vertex]) {
         for (size_t i = 0; i < adjacent.second; ++i)
-            next.push_back(adjacent.first);
+            next.emplace_back(adjacent.first);
     }
 
     return next;
@@ -45,7 +45,7 @@ std::vector<int> SetGraph::GetPrevVertices(const int vertex) const {
         // (possibly) several times
         // for heaven's sake what did I bring on this cursed land
         for (size_t i = 0; i < adjacencySets[v].at(vertex); ++i)
-            preceding.push_back(v);
+            preceding.emplace_back(v);
     }
 
     return preceding;

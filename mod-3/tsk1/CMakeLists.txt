@@ -12,6 +12,7 @@ src/ArcGraph.cpp
 src/ListGraph.cpp
 src/MatrixGraph.cpp
 src/SetGraph.cpp
+src/GraphMethods.cpp
 )
 target_include_directories(IGraph PUBLIC inc/)
 

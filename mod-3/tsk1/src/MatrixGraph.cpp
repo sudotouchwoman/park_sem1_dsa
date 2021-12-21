@@ -33,7 +33,7 @@ std::vector<int> MatrixGraph::GetNextVertices(const int vertex) const {
         adjacencyMatrix[vertex].cend(),
         [&i, &next](const int multiplicity) {
             for (int x = 0; x < multiplicity; ++x)
-                next.push_back(i);
+                next.emplace_back(i);
             ++i;
             }
     );
@@ -53,7 +53,7 @@ std::vector<int> MatrixGraph::GetPrevVertices(const int vertex) const {
     for (size_t i = 0; i < vertices; ++i) {
         const int multiplicity = adjacencyMatrix[i][vertex];
         for (int x = 0; x < multiplicity; ++x)
-            preceding.push_back(i);
+            preceding.emplace_back(i);
     }
 
     return preceding;
