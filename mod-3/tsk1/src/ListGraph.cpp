@@ -15,7 +15,6 @@ ListGraph::ListGraph(const IGraph & other) :
 void ListGraph::AddEdge(const int from, const int to) {
     checkVertex(from);
     checkVertex(to);
-
     adjacencyLists[from].push_back(to);
 }
 
@@ -25,6 +24,7 @@ std::vector<int> ListGraph::GetNextVertices(const int vertex) const {
 }
 
 std::vector<int> ListGraph::GetPrevVertices(const int vertex) const {
+    checkVertex(vertex);
     std::vector<int> preceding;
 
     for (size_t v = 0; v < adjacencyLists.size(); ++v) {
