@@ -14,8 +14,10 @@ public:
     int VerticesCount() const override { return vertices; }
     std::vector<int> GetNextVertices(int vertex) const override;
     std::vector<int> GetPrevVertices(int vertex) const override;
-
 private:
     size_t vertices = 0lu;
     std::vector<std::vector<int>> adjacencyLists;
+private:
+    bool hasEdge(const int from, const int to) const;
+    void checkVertex(const int vertex) const;
 };

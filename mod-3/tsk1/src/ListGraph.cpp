@@ -1,8 +1,11 @@
 #include "ListGraph.hpp"
 
+#include <algorithm>
+
 ListGraph::ListGraph(const IGraph & other) :
     vertices(other.VerticesCount()),
-    adjacencyLists(vertices) {
+    adjacencyLists(vertices)
+    {
         for (size_t i = 0; i < vertices; ++i) {
             for (const int v: other.GetNextVertices(i))
                 adjacencyLists[i].push_back(v);
@@ -10,14 +13,15 @@ ListGraph::ListGraph(const IGraph & other) :
     }
 
 void ListGraph::AddEdge(const int from, const int to) {
-    if (from > static_cast<int>(vertices)) throw std::runtime_error("Invalid vertex id");
-    if (to > static_cast<int>(vertices)) throw std::runtime_error("Invalid vertex id");
+    checkVertex(from);
+    checkVertex(to);
 
     adjacencyLists[from].push_back(to);
 }
 
 std::vector<int> ListGraph::GetNextVertices(const int vertex) const {
-    return adjacencyLists.at(vertex);
+    checkVertex(vertex);
+    return adjacencyLists[vertex];
 }
 
 std::vector<int> ListGraph::GetPrevVertices(const int vertex) const {
@@ -30,4 +34,20 @@ std::vector<int> ListGraph::GetPrevVertices(const int vertex) const {
     }
 
     return preceding;
+}
+
+bool ListGraph::hasEdge(const int from, const int to) const {
+    checkVertex(from);
+    checkVertex(to);
+
+    return adjacencyLists[from].cend() != std::find_if(
+        adjacencyLists[from].cbegin(),
+        adjacencyLists[from].cend(),
+        [to](const int a) { return to == a; }
+    );
+}
+
+void ListGraph::checkVertex(const int vertex) const {
+    if (vertex < static_cast<int>(vertices) and vertex >= 0) return;
+    throw std::runtime_error("Invalid vertex ID!");
 }
