@@ -93,8 +93,7 @@ void ListGraph::checkVertex(const int vertex) const {
 size_t count_shortest_paths(const IGraph & g, const int from, const int to) {
     size_t path_counts = 0;
     const int vertices = g.VerticesCount();
-    size_t min_path = 0;
-    bool found = false;
+    size_t min_path = vertices * vertices;
 
     // we will just perform bfs until the path shorter than min_path is found
     std::queue<std::pair<int, size_t>> to_visit;
@@ -105,26 +104,28 @@ size_t count_shortest_paths(const IGraph & g, const int from, const int to) {
     while(not to_visit.empty()) {
         const auto current_pair = to_visit.front();
         to_visit.pop();
+        const int current_v = current_pair.first;
+        const size_t current_path = current_pair.second;
         // the trick here is that we stop adding vertices
         // into the queue once any path
         // shorter than the min_path is found
-        if (current_pair.second > min_path and found) break;
+
+        if (current_path > min_path) break;
 
         // ordinary bfs but the only thing to be
         // remembered is marking found true as soon
         // as we foung the matching route
         // this said, we only should continue
         // checking during this very BFS step
-        for (const int next_v : g.GetNextVertices(current_pair.first)) {
-            if (not visited[next_v] and not found) {
-                visited[next_v] = true;
-                to_visit.emplace(next_v, current_pair.second + 1);
-            }
+        for (const int next_v : g.GetNextVertices(current_v)) {
+            if (not visited[next_v])
+                to_visit.emplace(next_v, current_path + 1);
             if (next_v != to) continue;
-            found = true;
-            min_path = current_pair.second;
+            min_path = current_path;
             ++path_counts;
         }
+        for (const int next_v : g.GetNextVertices(current_v))
+            visited[next_v] = true;
     }
     return path_counts;
 }
@@ -136,7 +137,7 @@ void run_shortest_paths(std::istream & in, std::ostream & out) {
 
     ListGraph g(vertices);
 
-    for (size_t i = 0; i < edges; ++i) {
+    for (int i = 0; i < edges; ++i) {
         in >> from >> to;
         g.AddEdge(from, to);
         g.AddEdge(to, from);
@@ -180,7 +181,7 @@ void test_shortest_paths() {
 }
 
 int main(int argc, char* argv[]) {
-    // test_shortest_paths();
-    run_shortest_paths(std::cin, std::cout);
+    test_shortest_paths();
+    // run_shortest_paths(std::cin, std::cout);
     return EXIT_SUCCESS;
 }
