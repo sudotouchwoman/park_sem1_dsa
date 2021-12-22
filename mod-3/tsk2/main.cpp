@@ -93,49 +93,49 @@ void ListGraph::checkVertex(const int vertex) const {
 // any path with BFS algorithm, we can be sure this is
 // the shortest one and thus stop searching
 size_t count_shortest_paths(const IGraph & g, const int from, const int to) {
-    size_t path_counts = 0;
-    const int vertices = g.VerticesCount();
-    size_t min_path = MAX_PATH;
-
     // we will just perform bfs until the path shorter than min_path is found
-    std::queue<std::pair<int, size_t>> to_visit;
+    const int vertices = g.VerticesCount();
     std::vector<bool> visited(vertices, false);
-    to_visit.emplace(from, 0);
+    std::vector<size_t>paths(vertices, 0);
+    std::deque<int> to_visit;
+
+    // track whether each vertex was visited
+    // during the BFS
+    // and how many paths are there
     visited[from] = true;
+    paths[from] = 1;
+    to_visit.emplace_back(from);
 
-    while(not to_visit.empty()) {
-        // extract the current vertex and its distance
-        const auto current_pair = to_visit.front();
-        to_visit.pop();
-        const int current_v = current_pair.first;
-        const size_t current_path = current_pair.second;
-        // the trick here is that we stop adding vertices
-        // into the queue once any path
-        // shorter than the min_path is found
+    while (true)  {
 
-        if (current_path > min_path) break;
+        // track nodes encountered during
+        // this iteration
+        // additional mask to avoid duplicates
+        std::deque<int> adjacent;
+        std::vector<bool> visited_now(vertices, false);
 
-        // ordinary bfs but the only thing to be
-        // remembered is marking found true as soon
-        // as we foung the matching route
-        // this said, we only should continue
-        // checking during this very BFS step
-        for (const int next_v : g.GetNextVertices(current_v)) {
-            // this is done to handle multigraphs correctly
-            if (not visited[next_v])
-                to_visit.emplace(next_v, current_path + 1);
-            // if we are not going to the target,
-            // do nothing
-            if (next_v != to) continue;
-            // otherwise, set the current path
-            // and 
-            min_path = current_path;
-            ++path_counts;
+        while (not to_visit.empty()) {
+            const int current_v = to_visit.front();
+            to_visit.pop_front();
+
+            for (const int & x: g.GetNextVertices(current_v)) {
+                if (not visited[x]) {
+                    paths[x] += paths[current_v];
+                    if (not visited_now[x])
+                        adjacent.emplace_back(x);
+                    visited_now[x] = true;
+                }
+            }
+
         }
-        for (const int next_v : g.GetNextVertices(current_v))
-            visited[next_v] = true;
+        if (adjacent.empty()) return 0;
+        if (visited_now[to]) return paths[to];
+
+        for (const int & x: adjacent)
+            visited[x] = true;
+
+        to_visit = adjacent;
     }
-    return path_counts;
 }
 
 void run_shortest_paths(std::istream & in, std::ostream & out) {
