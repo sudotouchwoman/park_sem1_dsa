@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
 
+#define MAX_PATH 200000
+
 // Interface declaration
 struct IGraph {
     virtual ~IGraph() {}
@@ -93,7 +95,7 @@ void ListGraph::checkVertex(const int vertex) const {
 size_t count_shortest_paths(const IGraph & g, const int from, const int to) {
     size_t path_counts = 0;
     const int vertices = g.VerticesCount();
-    size_t min_path = vertices * vertices;
+    size_t min_path = MAX_PATH;
 
     // we will just perform bfs until the path shorter than min_path is found
     std::queue<std::pair<int, size_t>> to_visit;
@@ -102,6 +104,7 @@ size_t count_shortest_paths(const IGraph & g, const int from, const int to) {
     visited[from] = true;
 
     while(not to_visit.empty()) {
+        // extract the current vertex and its distance
         const auto current_pair = to_visit.front();
         to_visit.pop();
         const int current_v = current_pair.first;
@@ -118,9 +121,14 @@ size_t count_shortest_paths(const IGraph & g, const int from, const int to) {
         // this said, we only should continue
         // checking during this very BFS step
         for (const int next_v : g.GetNextVertices(current_v)) {
+            // this is done to handle multigraphs correctly
             if (not visited[next_v])
                 to_visit.emplace(next_v, current_path + 1);
+            // if we are not going to the target,
+            // do nothing
             if (next_v != to) continue;
+            // otherwise, set the current path
+            // and 
             min_path = current_path;
             ++path_counts;
         }
@@ -151,28 +159,42 @@ void test_shortest_paths() {
     // make sure the example from the contest works out correctly
     std::stringstream in, out;
 
-    in << "5 7 " << "0 1 0 2 1 2 1 3 2 3 3 4 1 4" << " 0 4";
+    in << "5 7 " << "0 1  0 2  1 2  1 3  2 3  3 4  1 4" << " 0 4";
     run_shortest_paths(in, out);
     std::cerr << "Returned this: " << out.str() << '\n';
     assert(out.str() == "1");
     std::stringstream().swap(in);
     std::stringstream().swap(out);
 
-    in << "5 7 " << "0 1 0 2 0 3 1 3 1 2 2 3 3 4" << " 0 4";
+    in << "5 7 " << "0 1  0 2  0 3  3 1  1 2  2 3  3 4" << " 0 4";
     run_shortest_paths(in, out);
     std::cerr << "Returned this: " << out.str() << '\n';
     assert(out.str() == "1");
     std::stringstream().swap(in);
     std::stringstream().swap(out);
 
-    in << "7 10 " << "4 2 4 3 4 5 3 1 5 3 5 1 2 1 4 0 0 1 0 5" << " 4 1";
+    in << "4 7 " << "0 1  1 2  1 2  1 2  3 0  3 2  0 3" << " 0 2";
+    run_shortest_paths(in, out);
+    std::cerr << "Returned this: " << out.str() << '\n';
+    assert(out.str() == "5");
+    std::stringstream().swap(in);
+    std::stringstream().swap(out);
+
+    in << "6 9 " << "0 1  0 2  0 3  2 3  4 0  4 3  1 5  4 5  3 5" << " 0 5";
+    run_shortest_paths(in, out);
+    std::cerr << "Returned this: " << out.str() << '\n';
+    assert(out.str() == "3");
+    std::stringstream().swap(in);
+    std::stringstream().swap(out);
+
+    in << "7 10 " << "4 2  4 3  4 5  1 3  5 3  5 1  2 1  4 0  0 1  0 5" << " 4 1";
     run_shortest_paths(in, out);
     std::cerr << "Returned this: " << out.str() << '\n';
     assert(out.str() == "4");
     std::stringstream().swap(in);
     std::stringstream().swap(out);
 
-    in << "7 8 " << "4 2 4 3 4 5 3 1 5 3 5 1 2 1 4 0" << " 4 1";
+    in << "7 8 " << "4 2  3 4  4 5  3 1  5 3  5 1  2 1  4 0" << " 4 1";
     run_shortest_paths(in, out);
     std::cerr << "Returned this: " << out.str() << '\n';
     assert(out.str() == "3");
@@ -181,7 +203,7 @@ void test_shortest_paths() {
 }
 
 int main(int argc, char* argv[]) {
-    test_shortest_paths();
-    // run_shortest_paths(std::cin, std::cout);
+    // test_shortest_paths();
+    run_shortest_paths(std::cin, std::cout);
     return EXIT_SUCCESS;
 }
