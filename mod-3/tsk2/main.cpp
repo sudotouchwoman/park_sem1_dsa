@@ -93,14 +93,14 @@ void ListGraph::checkVertex(const int vertex) const {
 size_t count_shortest_paths(const IGraph & g, const int from, const int to) {
     size_t path_counts = 0;
     const int vertices = g.VerticesCount();
-    // the maximal possible path (actually impossibly long)
-    // is the number of edges in a complete graph
-    // for the given number of vertices
-    size_t min_path = vertices * vertices;
+    size_t min_path = 0;
+    bool found = false;
 
     // we will just perform bfs until the path shorter than min_path is found
     std::queue<std::pair<int, size_t>> to_visit;
+    std::vector<bool> visited(vertices, false);
     to_visit.emplace(from, 0);
+    visited[from] = true;
 
     while(not to_visit.empty()) {
         const auto current_pair = to_visit.front();
@@ -108,13 +108,20 @@ size_t count_shortest_paths(const IGraph & g, const int from, const int to) {
         // the trick here is that we stop adding vertices
         // into the queue once any path
         // shorter than the min_path is found
-        if (current_pair.second > min_path) continue;
+        if (current_pair.second > min_path and found) break;
 
-        // ordinary bfs but no need for outer loop as we are sure that such
-        // path will be found
+        // ordinary bfs but the only thing to be
+        // remembered is marking found true as soon
+        // as we foung the matching route
+        // this said, we only should continue
+        // checking during this very BFS step
         for (const int next_v : g.GetNextVertices(current_pair.first)) {
-            to_visit.emplace(next_v, current_pair.second + 1);
+            if (not visited[next_v] and not found) {
+                visited[next_v] = true;
+                to_visit.emplace(next_v, current_pair.second + 1);
+            }
             if (next_v != to) continue;
+            found = true;
             min_path = current_pair.second;
             ++path_counts;
         }
@@ -132,6 +139,7 @@ void run_shortest_paths(std::istream & in, std::ostream & out) {
     for (size_t i = 0; i < edges; ++i) {
         in >> from >> to;
         g.AddEdge(from, to);
+        g.AddEdge(to, from);
     }
 
     in >> from >> to;
@@ -142,9 +150,31 @@ void test_shortest_paths() {
     // make sure the example from the contest works out correctly
     std::stringstream in, out;
 
-    in << "4 5 " << "0 1 0 2 1 2 1 3 2 3" << " 0 3";
+    in << "5 7 " << "0 1 0 2 1 2 1 3 2 3 3 4 1 4" << " 0 4";
     run_shortest_paths(in, out);
-    assert(out.str() == "2");
+    std::cerr << "Returned this: " << out.str() << '\n';
+    assert(out.str() == "1");
+    std::stringstream().swap(in);
+    std::stringstream().swap(out);
+
+    in << "5 7 " << "0 1 0 2 0 3 1 3 1 2 2 3 3 4" << " 0 4";
+    run_shortest_paths(in, out);
+    std::cerr << "Returned this: " << out.str() << '\n';
+    assert(out.str() == "1");
+    std::stringstream().swap(in);
+    std::stringstream().swap(out);
+
+    in << "7 10 " << "4 2 4 3 4 5 3 1 5 3 5 1 2 1 4 0 0 1 0 5" << " 4 1";
+    run_shortest_paths(in, out);
+    std::cerr << "Returned this: " << out.str() << '\n';
+    assert(out.str() == "4");
+    std::stringstream().swap(in);
+    std::stringstream().swap(out);
+
+    in << "7 8 " << "4 2 4 3 4 5 3 1 5 3 5 1 2 1 4 0" << " 4 1";
+    run_shortest_paths(in, out);
+    std::cerr << "Returned this: " << out.str() << '\n';
+    assert(out.str() == "3");
 
     std::cerr << "OK\n";
 }
