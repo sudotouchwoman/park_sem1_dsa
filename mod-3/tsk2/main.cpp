@@ -1,7 +1,5 @@
 #include <bits/stdc++.h>
 
-#define MAX_PATH 200000
-
 // Interface declaration
 struct IGraph {
     virtual ~IGraph() {}
